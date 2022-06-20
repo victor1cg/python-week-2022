@@ -3,6 +3,7 @@ from dataclasses import dataclass
 
 #definindo os tipos consigo realizar uma validação
 #@dataclass é um decorador, injetar novos metodos e classes; Cria automatica// um inicializador __init__
+
 @dataclass
 class Beer2:
     name: str
@@ -11,18 +12,25 @@ class Beer2:
     imagem: int
     cost: int
 
+#-------------
 #Criar um objeto que se pareça com um tabela
 from typing import Optional             #ajuda a criar o id aleatorio
 from sqlmodel import SQLModel, Field
 from sqlmodel import select
-from pydantic import validator
+from pydantic import validator          #validador, por exemplo o sabor de 1-10
 
 class Beer(SQLModel, table = True):
-    id: Optional[int] =Field(primary_key=True, default = None)     #Obrigatorio ter id para o sql
-    name: str
+    id: Optional[int] = Field(primary_key=True, default = None)      #Obrigatorio ter id para o sql.
+    name: str                                                       #temos os atributos e os metodos
     style: str
     flavor: int
-    imagem: int
+    image: int
     cost: int
 
-brewdog = Beer(name='Brewdog', style='NEIPA', flavor=6, imagem=8, cost=10)
+    @validator("flavor","image","cost")                             #aplicar o mesmo design pattern.DECORATOR
+    def validating_ratings(cls, v, field):                          #função associada a essa classe.
+        if v < 1 or v > 10:
+            raise RuntimeError(f'\n{field.name} must be between one and ten')
+        return v
+
+brewdog = Beer(name='Brewdog', style='NEIPA', flavor=60, image=8, cost=10)
