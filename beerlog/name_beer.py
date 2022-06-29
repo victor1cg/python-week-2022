@@ -6,4 +6,4 @@ with Session(engine) as session:
     beers = select(Beer)
     results = session.exec(sql)
     for beer in results:
-            print(beer.name)
+        print(beer.name)

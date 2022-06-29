@@ -1,4 +1,4 @@
-#Aqui que o arquivo começa, chamado de entry point.
+# Aqui que o arquivo começa, chamado de entry point.
 
 from .cli import main
 
